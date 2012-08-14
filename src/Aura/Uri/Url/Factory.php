@@ -77,40 +77,13 @@ class Factory
      * @param string $spec The URL string to set from.
      * 
      * @return Url
+     *
+     * @deprecated Use {@link Url::fromSpec($spec)}
      * 
      */
     public function newInstance($spec)
     {
-        $elem = [
-            'scheme'   => null,
-            'user'     => null,
-            'pass'     => null,
-            'host'     => null,
-            'port'     => null,
-            'path'     => null,
-            'query'    => null,
-            'fragment' => null,
-        ];
-
-        $parts = parse_url($spec);
-        $elem = (array) $parts + $elem;
-
-        $path = new Path([]);
-        $path->setFromString($elem['path']);
-
-        $query = new Query([]);
-        $query->setFromString($elem['query']);
-
-        return new Url(
-            $elem['scheme'],
-            $elem['user'],
-            $elem['pass'],
-            $elem['host'],
-            $elem['port'],
-            $path,
-            $query,
-            $elem['fragment']
-        );
+        return Url::fromSpec($spec);
     }
 
     /**
@@ -122,7 +95,7 @@ class Factory
      */
     public function newCurrent()
     {
-        return $this->newInstance($this->current);
+        return Url::fromSpec($this->current);
     }
 }
  

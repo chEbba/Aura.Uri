@@ -147,6 +147,58 @@ class Url
     }
 
     /**
+     *
+     * Creates and returns a new Url object from string.
+     *
+     * @param string $spec The URL string to set from. Format "<scheme>://[<user>[:<pass>]@]<host>[<path>][?<query>][#<fragment>]".
+     *
+     * @return Url
+     *
+     */
+    public static function fromSpec($spec)
+    {
+        $elem = array(
+            'scheme'   => null,
+            'user'     => null,
+            'pass'     => null,
+            'host'     => null,
+            'port'     => null,
+            'path'     => null,
+            'query'    => null,
+            'fragment' => null,
+        );
+
+        $parts = parse_url($spec);
+        // Empty array or false from parse_str, or missed required parts
+        if (!$parts || !isset($parts['scheme']) || !isset($parts['host'])) {
+            throw new \InvalidArgumentException(sprintf(
+                "Wrong URL format '%s', expected '%s'",
+                $spec,
+                '<scheme>://[<user>[:<pass>]@]<host>[<path>][?<query>][#<fragment>]'
+            ));
+        }
+
+        $elem = (array) $parts + $elem;
+
+        $path = new Path();
+        $path->setFromString($elem['path']);
+
+        $query = new Query();
+        $query->setFromString($elem['query']);
+
+        return new Url(
+            $elem['scheme'],
+            $elem['user'],
+            $elem['pass'],
+            $elem['host'],
+            $elem['port'],
+            $path,
+            $query,
+            $elem['fragment']
+        );
+    }
+
+    /**
      * 
      * Magic get for properties.
      * 
