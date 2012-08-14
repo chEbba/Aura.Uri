@@ -98,13 +98,13 @@ class Url
      * Constructor.
      * 
      * @param string $scheme The URL scheme (e.g. `http`).
-     * 
-     * @param string $user The username.
-     * 
-     * @param string $pass The password.
-     * 
+     *
      * @param string $host The hostname.
-     * 
+     *
+     * @param string $user The username.
+     *
+     * @param string $pass The password.
+     *
      * @param int $port The port number.
      * 
      * @param Path $path The path elements, including format.
@@ -116,25 +116,25 @@ class Url
      */
     public function __construct(
         $scheme,
-        $user,
-        $pass,
         $host,
-        $port,
-        Path $path,
-        Query $query,
-        $fragment
+        $user = null,
+        $pass = null,
+        $port = null,
+        Path $path = null,
+        Query $query = null,
+        $fragment = null
     ) {
         $this->scheme   = $scheme;
+        $this->host     = $host;
         $this->user     = $user;
         $this->pass     = $pass;
-        $this->host     = $host;
         $this->port     = $port;
-        $this->path     = $path;
-        $this->query    = $query;
+        $this->path     = $path ?: new Path();
+        $this->query    = $query ?: new Query();
         $this->fragment = $fragment;
     }
 
-    /** 
+    /**
      * 
      * Converts the URI object to a string and returns it. 
      * 
